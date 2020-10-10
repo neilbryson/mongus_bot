@@ -13,6 +13,7 @@ namespace mongus_bot
     class Program
     {
         private IConfiguration _config;
+        private DiscordSocketClient _client;
 
         static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
@@ -20,15 +21,15 @@ namespace mongus_bot
         public async Task MainAsync()
         {
             _config = BuildConfig();
-            var services = ConfigureServices();
-            var client = new DiscordSocketClient(new DiscordSocketConfig
+            _client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Info
             });
-            client.Log += LogAsync;
+            var services = ConfigureServices();
+            _client.Log += LogAsync;
             services.GetRequiredService<CommandService>().Log += LogAsync;
-            await client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("token"));
-            await client.StartAsync();
+            await _client.LoginAsync(TokenType.Bot, _config["token"]);
+            await _client.StartAsync();
             await services.GetRequiredService<CommandHandlingService>().InitialiseAsync();
             await Task.Delay(-1);
         }
@@ -42,6 +43,7 @@ namespace mongus_bot
         private ServiceProvider ConfigureServices()
         {
             return new ServiceCollection()
+                .AddSingleton(_client)
                 .AddSingleton<CommandService>()
                 .AddSingleton<VoiceService>()
                 .AddSingleton<CommandHandlingService>()
@@ -52,7 +54,7 @@ namespace mongus_bot
         private IConfiguration BuildConfig()
         {
             return new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(Environment.CurrentDirectory)
                 .AddJsonFile("config.json")
                 .Build();
         }
