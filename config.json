@@ -1,4 +1,5 @@
 {
-  "token": "<token here>",
-  "voice_channel_id": "<voice channel id here>"
+  "muted_role_id": 0,
+  "token": "<insert token here>",
+  "voice_channel_id": 0
 }
