@@ -37,7 +37,7 @@ namespace mongus_bot.Services
 
             var argPos = 0;
 
-            if (!message.HasStringPrefix("mongus ", ref argPos)) return;
+            if (!message.HasStringPrefix("mg ", ref argPos)) return;
 
             var context = new SocketCommandContext(_discord, message);
 
