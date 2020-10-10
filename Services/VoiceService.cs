@@ -18,14 +18,15 @@ namespace mongus_bot.Services
             _config = services.GetRequiredService<IConfiguration>();
         }
 
-        public Task<bool> MuteAllAsync(bool shouldMute)
+        public Task<Tuple<bool, List<string>>> MuteAllAsync(bool shouldMute)
         {
-            var taskCompletion = new TaskCompletionSource<bool>();
+            var taskCompletion = new TaskCompletionSource<Tuple<bool, List<string>>>();
             var taskList = new List<Task>();
             var users = GetConnectedUsers();
+            var mutedUsers = new List<string>();
             if (users.Count == 0)
             {
-                taskCompletion.SetResult(false);
+                taskCompletion.SetResult(Tuple.Create(false, mutedUsers));
                 return taskCompletion.Task;
             }
 
@@ -34,9 +35,10 @@ namespace mongus_bot.Services
                 var isMuted = user.IsMuted || user.IsSelfMuted;
                 if ((shouldMute && isMuted) || (!shouldMute && !isMuted)) continue;
                 taskList.Add(MuteUserAsync(user, shouldMute));
+                mutedUsers.Add($"{user.Username}#{user.Discriminator}");
             }
 
-            taskCompletion.SetResult(true);
+            taskCompletion.SetResult(Tuple.Create(true, mutedUsers));
             return taskCompletion.Task;
         }
 

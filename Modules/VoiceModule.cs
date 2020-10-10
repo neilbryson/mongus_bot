@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using mongus_bot.Services;
 
@@ -13,7 +17,11 @@ namespace mongus_bot.Modules
         public async Task MuteAsync()
         {
             var res = await MuteFactoryAsync(true);
-            if (res) await ReplyAsync("Shhhhhhhh");
+            if (res.Item1)
+            {
+                var embed = BuildEmbed(res.Item2, true);
+                await ReplyAsync(embed: embed);
+            }
         }
 
         [Command("unmuteall")]
@@ -21,18 +29,46 @@ namespace mongus_bot.Modules
         public async Task UnmuteAsync()
         {
             var res = await MuteFactoryAsync(false);
-            if (res) await ReplyAsync("Find the impostor!");
+            if (res.Item1)
+            {
+                var embed = BuildEmbed(res.Item2, false);
+                await ReplyAsync(embed: embed);
+            }
         }
 
-        private async Task<bool> MuteFactoryAsync(bool shouldMute)
+        private Embed BuildEmbed(List<string> users, bool isMuted)
+        {
+            string title = isMuted ? "Shhhhhhhhh" : "Find the impostor!";
+            string footer = isMuted ? "You are now muted." : "You are now unmuted.";
+            Color color = isMuted ? Color.DarkRed : Color.Teal;
+            var userList = UserList(users);
+            return new EmbedBuilder().WithTitle(title)
+                .WithDescription(userList)
+                .WithColor(color)
+                .WithFooter(f => f.Text = footer)
+                .WithCurrentTimestamp()
+                .Build();
+        }
+
+        private string UserList(List<string> users)
+        {
+            var sb = new StringBuilder();
+            users.ForEach(u =>
+            {
+                sb.Append($"- {u}\n");
+            });
+            return sb.ToString();
+        }
+
+        private async Task<Tuple<bool, List<string>>> MuteFactoryAsync(bool shouldMute)
         {
             var res = await VoiceService.MuteAllAsync(shouldMute);
-            if (!res)
+            if (!res.Item1)
             {
                 await ReplyAsync("Whaaaat? There are no users in the voice channel!");
-                return false;
+                return res;
             }
-            return true;
+            return res;
         }
     }
 }
