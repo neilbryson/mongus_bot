@@ -12,26 +12,27 @@ namespace mongus_bot.Modules
         [Alias("mute")]
         public async Task MuteAsync()
         {
-            var res = await VoiceService.MuteAllAsync(true);
-            if (!res)
-            {
-                await ReplyAsync("Whaaaat? There are no users in the voice channel!");
-                return;
-            }
-            await ReplyAsync("Shhhhhhhh");
+            var res = await MuteFactoryAsync(true);
+            if (res) await ReplyAsync("Shhhhhhhh");
         }
 
         [Command("unmuteall")]
         [Alias("unmute")]
         public async Task UnmuteAsync()
         {
-            var res = await VoiceService.MuteAllAsync(false);
+            var res = await MuteFactoryAsync(false);
+            if (res) await ReplyAsync("Find the impostor!");
+        }
+
+        private async Task<bool> MuteFactoryAsync(bool shouldMute)
+        {
+            var res = await VoiceService.MuteAllAsync(shouldMute);
             if (!res)
             {
                 await ReplyAsync("Whaaaat? There are no users in the voice channel!");
-                return;
+                return false;
             }
-            await ReplyAsync("Find the impostor!");
+            return true;
         }
     }
 }
