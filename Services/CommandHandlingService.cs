@@ -48,7 +48,7 @@ namespace mongus_bot.Services
         {
             if (!command.IsSpecified) return;
             if (result.IsSuccess) return;
-            await context.Channel.SendMessageAsync($"error: ${result}");
+            await context.Channel.SendMessageAsync($"Sorry, I didn't understand that.");
         }
     }
 }

@@ -18,28 +18,21 @@ namespace mongus_bot.Services
             _config = services.GetRequiredService<IConfiguration>();
         }
 
-        public Task<Tuple<bool, List<string>>> MuteAllAsync(bool shouldMute)
+        public Task MuteUsersAsync(List<SocketGuildUser> users, bool shouldMute)
         {
-            var taskCompletion = new TaskCompletionSource<Tuple<bool, List<string>>>();
-            var taskList = new List<Task>();
-            var users = GetConnectedUsers();
-            var mutedUsers = new List<string>();
-            if (users.Count == 0)
-            {
-                taskCompletion.SetResult(Tuple.Create(false, mutedUsers));
-                return taskCompletion.Task;
-            }
+            var mutedUsers = new List<SocketGuildUser>();
+            var tasks = new List<Task>();
+            if (users.Count == 0) return Task.FromResult<List<SocketGuildUser>>(mutedUsers);
 
             foreach (var user in users)
             {
                 var isMuted = user.IsMuted || user.IsSelfMuted;
                 if ((shouldMute && isMuted) || (!shouldMute && !isMuted)) continue;
-                taskList.Add(MuteUserAsync(user, shouldMute));
-                mutedUsers.Add($"{user.Username}#{user.Discriminator}");
+                tasks.Add(MuteUserAsync(user, shouldMute));
+                mutedUsers.Add(user);
             }
 
-            taskCompletion.SetResult(Tuple.Create(true, mutedUsers));
-            return taskCompletion.Task;
+            return Task.FromResult<List<SocketGuildUser>>(mutedUsers);
         }
 
         private async Task MuteUserAsync(SocketGuildUser user, bool shouldMute)
@@ -56,7 +49,6 @@ namespace mongus_bot.Services
         {
             var channel = GetVoiceChannel();
             return channel.Users;
-
         }
 
         private SocketVoiceChannel GetVoiceChannel()

@@ -44,6 +44,7 @@ namespace mongus_bot
             return new ServiceCollection()
                 .AddSingleton(_client)
                 .AddSingleton<CommandService>()
+                .AddSingleton<GameService>()
                 .AddSingleton<VoiceService>()
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton(_config)
