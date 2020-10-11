@@ -41,7 +41,6 @@ namespace mongus_bot.Services
             await user.ModifyAsync(u =>
             {
                 u.Mute = shouldMute;
-                u.Deaf = shouldMute;
             });
         }
 
