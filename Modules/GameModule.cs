@@ -87,6 +87,51 @@ namespace mongus_bot.Modules
             }
         }
 
+        [Command("vote")]
+        [Alias("votestart", "findimpostor")]
+        public async Task VoteStartAsync()
+        {
+            try
+            {
+                GameService.SetVoteStart();
+                var players = GameService.GetLivingPlayers();
+                var playerList = DiscordUserUtilities.ToList(players);
+                await VoiceService.MuteUsersAsync(playerList, false);
+                var embed = EmbedUtilities.BuildEmbed(
+                    "Find the impostor!",
+                    EmbedUtilities.CreateList(DiscordUserUtilities.GetUsernames(players)),
+                    "You are now unmuted.",
+                    Color.Green
+                );
+                await ReplyAsync(embed: embed);
+            } catch (InvalidOperationException e)
+            {
+                await ReplyAsync(e.Message);
+            }
+        }
+
+        [Command("voteend")]
+        public async Task VoteEndAsync()
+        {
+            try
+            {
+                GameService.SetVoteEnd();
+                var players = GameService.GetLivingPlayers();
+                var playerList = DiscordUserUtilities.ToList(players);
+                await VoiceService.MuteUsersAsync(playerList, true);
+                var embed = EmbedUtilities.BuildEmbed(
+                    "Let's hope that's the right choice...",
+                    EmbedUtilities.CreateList(DiscordUserUtilities.GetUsernames(players)),
+                    "You are now muted.",
+                    Color.DarkRed
+                );
+                await ReplyAsync(embed: embed);
+            } catch (InvalidOperationException e)
+            {
+                await ReplyAsync(e.Message);
+            }
+        }
+
         [Command("dead")]
         [Alias("ded", "rip", "setdead")]
         public async Task SetAsDeadAsync(SocketGuildUser user)
