@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using mongus_bot.Services;
 using mongus_bot.Utilities;
 
@@ -80,6 +81,30 @@ namespace mongus_bot.Modules
                     Color.Gold
                 );
                 await ReplyAsync(embed: embed);
+            } catch (InvalidOperationException e)
+            {
+                await ReplyAsync(e.Message);
+            }
+        }
+
+        [Command("dead")]
+        [Alias("ded", "rip", "setdead")]
+        public async Task SetAsDeadAsync(SocketGuildUser user)
+        {
+            try
+            {
+                GameService.SetAsDead(user);
+                var embed = EmbedUtilities.BuildEmbed(
+                    "Press F to pay respects",
+                    $"RIP {user.Username}#{user.Discriminator}",
+                    "You are now muted.",
+                    Color.DarkGrey
+                );
+                var message = await ReplyAsync(embed: embed);
+                await message.AddReactionAsync(new Emoji("\uD83C\uDDEB"));
+            } catch (ArgumentException e)
+            {
+                await ReplyAsync(e.Message);
             } catch (InvalidOperationException e)
             {
                 await ReplyAsync(e.Message);

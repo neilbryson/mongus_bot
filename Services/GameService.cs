@@ -10,6 +10,12 @@ namespace mongus_bot.Services
         private List<SocketGuildUser> _players;
         private List<SocketGuildUser> _deadPlayers;
 
+        public GameService()
+        {
+            _players = new List<SocketGuildUser>();
+            _deadPlayers = new List<SocketGuildUser>();
+        }
+
         public void StartGame(List<SocketGuildUser> players)
         {
             if (_isGameInProgress) throw new InvalidOperationException("Game already in progress");
@@ -36,6 +42,7 @@ namespace mongus_bot.Services
 
         public void SetAsDead(SocketGuildUser user)
         {
+            if (!_isGameInProgress) throw new InvalidOperationException("What the hell? There's no game!");
             if (_deadPlayers.Contains(user))
                 throw new ArgumentException($"{user.Username}#{user.Discriminator} is already dead! No more!!!");
 
