@@ -37,7 +37,8 @@ namespace mongus_bot.Modules
                     Color.Teal
                 );
                 await ReplyAsync(embed: embed);
-            } catch (InvalidOperationException e)
+            }
+            catch (InvalidOperationException e)
             {
                 await ReplyAsync(e.Message);
             }
@@ -59,7 +60,8 @@ namespace mongus_bot.Modules
                     Color.Teal
                 );
                 await ReplyAsync(embed: embed);
-            } catch (InvalidOperationException e)
+            }
+            catch (InvalidOperationException e)
             {
                 await ReplyAsync(e.Message);
             }
@@ -81,7 +83,8 @@ namespace mongus_bot.Modules
                     Color.Gold
                 );
                 await ReplyAsync(embed: embed);
-            } catch (InvalidOperationException e)
+            }
+            catch (InvalidOperationException e)
             {
                 await ReplyAsync(e.Message);
             }
@@ -104,7 +107,8 @@ namespace mongus_bot.Modules
                     Color.Green
                 );
                 await ReplyAsync(embed: embed);
-            } catch (InvalidOperationException e)
+            }
+            catch (InvalidOperationException e)
             {
                 await ReplyAsync(e.Message);
             }
@@ -126,7 +130,8 @@ namespace mongus_bot.Modules
                     Color.DarkRed
                 );
                 await ReplyAsync(embed: embed);
-            } catch (InvalidOperationException e)
+            }
+            catch (InvalidOperationException e)
             {
                 await ReplyAsync(e.Message);
             }
@@ -147,10 +152,12 @@ namespace mongus_bot.Modules
                 );
                 var message = await ReplyAsync(embed: embed);
                 await message.AddReactionAsync(new Emoji("\uD83C\uDDEB"));
-            } catch (ArgumentException e)
+            }
+            catch (ArgumentException e)
             {
                 await ReplyAsync(e.Message);
-            } catch (InvalidOperationException e)
+            }
+            catch (InvalidOperationException e)
             {
                 await ReplyAsync(e.Message);
             }
