@@ -22,7 +22,7 @@ namespace mongus_bot.Modules
         public async Task HelpAsync()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("A simple Discord bot for Among Us players!\n");
+            sb.Append("A simple Discord bot for Among Us players!\n\n");
             foreach (var c in _commands.Commands)
             {
                 sb.Append($"**{c.Name}** {GetCommandAliases(c)}\n{c.Summary}\n");
