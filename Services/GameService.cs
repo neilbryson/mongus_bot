@@ -53,6 +53,15 @@ namespace mongus_bot.Services
             _deadPlayers.Add(user);
         }
 
+        public void SetAsLiving(SocketGuildUser user)
+        {
+            CheckGameProgress();
+            if (!_deadPlayers.Contains(user))
+                throw new ArgumentException("Resurrecting the living? wat");
+
+            _deadPlayers.Remove(user);
+        }
+
         public void SetVoteStart()
         {
             CheckGameProgress();

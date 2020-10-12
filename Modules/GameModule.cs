@@ -168,5 +168,31 @@ namespace mongus_bot.Modules
                 await ReplyAsync(e.Message);
             }
         }
+
+        [Command("live")]
+        [Alias("resurrect", "resu")]
+        [Summary("Brings a player back from the dead.")]
+        public async Task SetAsLivingAsync(SocketGuildUser user)
+        {
+            try
+            {
+                GameService.SetAsLiving(user);
+                var embed = EmbedUtilities.BuildEmbed(
+                    "Gamer rise up",
+                    $"It's a miracle. {user.Username}#{user.Discriminator} lives once more!",
+                    "You are now back in the game.",
+                    Color.Teal
+                );
+                await ReplyAsync(embed: embed);
+            }
+            catch (ArgumentException e)
+            {
+                await ReplyAsync(e.Message);
+            }
+            catch (InvalidOperationException e)
+            {
+                await ReplyAsync(e.Message);
+            }
+        }
     }
 }
