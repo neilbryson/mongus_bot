@@ -43,7 +43,7 @@ namespace mongus_bot.Modules
                 if (i == 0) sb.Append("(");
                 string alias = command.Aliases[i];
                 if (alias == command.Name) continue;
-                sb.Append($"**{command.Aliases[i]}**");
+                sb.Append($"**{alias}**");
                 if (i != command.Aliases.Count - 1) sb.Append(", ");
                 else sb.Append(")");
             }
