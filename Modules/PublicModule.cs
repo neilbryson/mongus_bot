@@ -8,11 +8,12 @@ namespace mongus_bot.Modules
     {
         [Command("ping")]
         [Alias("pong", "hello")]
+        [Summary("You know it.")]
         public Task PingAsync()
             => ReplyAsync("pong!");
 
         [Command("f")]
-        [Alias("F")]
+        [Summary("Pay your respects.")]
         public async Task RespectAsync()
         {
             var message = await ReplyAsync("F");

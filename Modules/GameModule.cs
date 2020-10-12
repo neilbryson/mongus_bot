@@ -15,6 +15,7 @@ namespace mongus_bot.Modules
 
         [Command("start")]
         [Alias("g", "game")]
+        [Summary("Starts a new game. Mutes all players.")]
         public async Task StartGameAsync()
         {
             var players = VoiceService.GetConnectedUsers();
@@ -46,6 +47,7 @@ namespace mongus_bot.Modules
 
         [Command("restart")]
         [Alias("g+", "game+")]
+        [Summary("Restarts the game state. Mutes all players.")]
         public async Task RestartGameAsync()
         {
             try
@@ -69,6 +71,7 @@ namespace mongus_bot.Modules
 
         [Command("stop")]
         [Alias("end", "gg")]
+        [Summary("Ends the game. Unmutes all players.")]
         public async Task StopGameAsync()
         {
             try
@@ -92,6 +95,7 @@ namespace mongus_bot.Modules
 
         [Command("vote")]
         [Alias("votestart", "findimpostor")]
+        [Summary("Starts the voting process. Unmutes all living players.")]
         public async Task VoteStartAsync()
         {
             try
@@ -115,6 +119,7 @@ namespace mongus_bot.Modules
         }
 
         [Command("voteend")]
+        [Summary("Ends the voting process. Mutes all living players.")]
         public async Task VoteEndAsync()
         {
             try
@@ -139,6 +144,7 @@ namespace mongus_bot.Modules
 
         [Command("dead")]
         [Alias("ded", "rip", "setdead")]
+        [Summary("Set a player as dead. Mutes the player until the next match.")]
         public async Task SetAsDeadAsync(SocketGuildUser user)
         {
             try
